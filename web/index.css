@@ -1,14 +1,33 @@
 * {
     box-sizing: border-box;
+    font-family: sans-serif;
+}
+
+body {
+    padding: 0;
+    margin: 0;
 }
 
 #board-container {
-    pointer-events: none;
+    /* pointer-events: none; */
+    position: relative;
 }
 
-#board-container.enable {
+/* #board-container:not(.enable)::before {
+    content: '';
+    display: block;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: #0004;
+    z-index: 10;
+} */
+
+/* #board-container.enable {
     pointer-events: all;
-}
+} */
 
 .board {
     display: grid;
@@ -46,6 +65,9 @@
     background-color: #7fffd4;
     pointer-events: none;
 }
+.board .board-square.selected.adversary {
+    background-color: #ff7f7f;
+}
 
 .board  {
     counter-reset: row column;
@@ -71,4 +93,84 @@
     top: -0.5rem;
     left: 50%;
     transform: translate(-50%, -100%);
+}
+
+
+
+.turn-indicator[data-turn="self"] .your-turn-indicator {
+    background-color: #7fffd48f
+}
+.turn-indicator[data-turn="self"] .adversary-turn-indicator {
+    background-color: #0004
+}
+.turn-indicator[data-turn="adversary"] .your-turn-indicator {
+    background-color: #0004
+}
+.turn-indicator[data-turn="adversary"] .adversary-turn-indicator {
+    background-color: #7fffd48f
+}
+
+.turn-indicator {
+    display: flex;
+    margin-bottom: 2rem;
+}
+
+.turn-indicator > * {
+    padding: 0.5rem 0.75rem;
+    margin: 0;
+}
+
+.turn-indicator :first-child {
+    border-top-left-radius: 8px;
+    border-bottom-left-radius: 8px
+}
+
+.turn-indicator :last-child {
+    border-top-right-radius: 8px;
+    border-bottom-right-radius: 8px;
+}
+
+stacker-board {
+    display: block;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 1rem;
+}
+
+
+/* ******+ */
+
+.modal {
+
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: #0004;
+    z-index: 10;
+    visibility: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.modal.open {
+    visibility: visible;
+}
+
+.modal > .modal-content {
+    background-color: white;
+    padding: 2rem;
+    min-width: 600px;
+    min-height: 150px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 8px;
+}
+
+#adversary-turn.modal {
+    background-color: #0002;
 }

@@ -7,13 +7,30 @@
     <link rel="stylesheet" href="index.css" />
   </head>
   <body>
-    <!-- Simple HTML page for sending messages with input box and send button-->
-    <button type="button" id="login">login</button>
-    <button type="button" id="logout">logout</button>
-
+    <button type="button" id="startGame">start game</button>
     <main>
       <div id="board-container"></div>
+
+      <section id="end-of-game" class="modal">
+        <div class="modal-content">
+          <p class="message"></p>
+        </div>
+      </section>
+      <section id="adversary-turn" class="modal"></section>
+      <section id="wait-for-adversary" class="modal">
+        <div class="modal-content">
+          <p>Esperando a un adversario</p>
+        </div>
+      </section>
     </main>
-    <script type="module" src="./main.js"></script>
+    <script type="module">
+      import { main, startGame } from './main.js'
+
+      const container = document.getElementById('board-container')
+      const startButton = document.getElementById('startGame')
+
+      const ws = main(container)
+      startButton.addEventListener('click', () => startGame(container, ws))
+    </script>
   </body>
 </html>

@@ -1,5 +1,5 @@
 {
-  "name": "server",
+  "name": "websocket-test",
   "version": "1.0.0",
   "description": "",
   "main": "main.js",
@@ -8,13 +8,19 @@
     "start": "nodemon"
   },
   "keywords": [],
-  "author": "",
+  "author": "Jesus Figueredo <jesus@figueredo.dev>",
   "license": "ISC",
   "dependencies": {
+    "dotenv": "^16.0.3",
     "express": "^4.18.2",
     "express-session": "^1.17.3",
     "nodemon": "^2.0.20",
     "uuid": "^9.0.0",
     "ws": "^8.11.0"
+  },
+  "devDependencies": {
+    "eslint": "^8.31.0",
+    "eslint-config-prettier": "^8.5.0",
+    "prettier": "^2.8.1"
   }
 }
