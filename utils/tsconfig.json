@@ -1,0 +1,13 @@
+{
+  "include": ["**/*.js"],
+  "exclude": ["node_modules/"],
+  "compilerOptions": {
+    "skipLibCheck": true,
+    "allowJs": true,
+    "declaration": true,
+    "emitDeclarationOnly": true,
+    "outDir": "types",
+    "declarationMap": false,
+    "moduleResolution": "node16"
+  }
+}

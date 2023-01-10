@@ -1,0 +1,30 @@
+{
+  "compileOnSave": false,
+  "compilerOptions": {
+    "target": "es2017",
+    "module": "esnext",
+    "moduleResolution": "Node16",
+    "noEmitOnError": true,
+    "lib": ["ES2022", "DOM"],
+    "strict": true,
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
+    "experimentalDecorators": true,
+    "importHelpers": false,
+    "baseUrl": "./",
+    "allowJs": true,
+    "resolveJsonModule": true,
+    "forceConsistentCasingInFileNames": true,
+    "skipLibCheck": true,
+    "noImplicitReturns": true,
+    "useDefineForClassFields": false,
+    "noImplicitOverride": true,
+    "isolatedModules": true,
+    "alwaysStrict": true,
+    "emitDeclarationOnly": true,
+    "declaration": true
+  },
+
+  "include": ["./**/*.js"],
+  "exclude": ["node_modules/"]
+}

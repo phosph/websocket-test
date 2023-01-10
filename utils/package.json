@@ -1,0 +1,15 @@
+{
+  "name": "utils",
+  "version": "1.0.0",
+  "type": "module",
+  "devDependencies": {
+    "typescript": "^4.9.4"
+  },
+  "exports": {
+    "./event-types.js": {
+      "import": "./event-types.js",
+      "default": "./event-types.js",
+      "types": "./types/event-types.d.ts"
+    }
+  }
+}

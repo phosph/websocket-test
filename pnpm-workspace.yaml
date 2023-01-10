@@ -1,0 +1,6 @@
+packages:
+  # exclude packages that are inside test directories
+  - '!**/test/**'
+  - utils
+  - web
+  - server
