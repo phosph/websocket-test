@@ -1,44 +1,24 @@
 // @ts-check
+import { Game } from '../models/index.js'
 import { UserAddedEvent } from './game-controller-events.js'
 
 /**
  * @emits UserAdded
  */
 export class GameController extends EventTarget {
-  static USER_A_SQAURE = 1
-  static USER_B_SQAURE = 2
-  static NONE_SQAURE = 0
-
   /**
    * @readonly
-   * @type {number[]}
+   * @type {Game & import('../models/game.model.js').GameModel}
    */
-  game = Array.from({ length: 49 }, () => GameController.NONE_SQAURE)
-
-  /** @type {string | null} */
-  #userA = null
+  game$
 
   get userA() {
-    return this.#userA
+    return this.game$.userAId
   }
 
-  // /** @type {import("ws").WebSocket | null} */
-  // #userAWS = null
-  // get userAWS() {
-  //   return this.#userAWS
-  // }
-
-  /** @type {string | null} */
-  #userB = null
   get userB() {
-    return this.#userB
+    return this.game$.userBId
   }
-
-  // /** @type {import("ws").WebSocket | null} */
-  // #userBWS = null
-  // get userBWS() {
-  //   return this.#userBWS
-  // }
 
   /**
    * if the game can start
@@ -55,59 +35,55 @@ export class GameController extends EventTarget {
    */
   constructor({ userA = null, userB = null } = {}) {
     super()
-    this.#userA = userA
-    this.#userB = userB
+
+    this.game$ =
+      /** @type {Game & import('../models/game.model.js').GameModel} */ (
+        Game.build({
+          userAId: userA,
+          userBId: userB,
+        })
+      )
+  }
+
+  async init() {
+    await this.game$.save()
+    return this
   }
 
   /**
    * Add a new gamer
    * @param {string} gamerId
-   * @returns {boolean} true if the gamer was addet, false otherwise
+   * @returns {Promise<boolean>} true if the gamer was addet, false otherwise
    */
-  addGamer(gamerId) {
-    if (!gamerId) throw TypeError('gamerId must be a string')
+  async addGamer(gamerId) {
+    const added = this.game$.addGamer(gamerId)
 
-    if (!this.userA) {
-      this.#userA = gamerId
-    } else if (!this.userB) {
-      this.#userB = gamerId
-    } else return false
+    if (added) await this.game$.save()
 
     this.dispatchEvent(new UserAddedEvent({ cancelable: false }))
 
-    return true
-  }
-
-  /**
-   * @param {string} gamerId
-   * @returns {boolean}
-   */
-  hasGamer(gamerId) {
-    return this.userA === gamerId || this.userB === gamerId
+    return added
   }
 
   /**
    *
    * @param {string} who
    * @param {number} index
+   * @return {Promise<Boolean>} if the game ends
    */
-  selectSquare(who, index) {
-    const _who =
-      who === this.userA
-        ? GameController.USER_A_SQAURE
-        : GameController.USER_B_SQAURE
+  async selectSquare(who, index) {
+    const _who = who === this.userA ? Game.USER_A_SQAURE : Game.USER_B_SQAURE
 
-    if (index < 0 || index > 48)
-      throw new RangeError('index must be greater than 0 and les than 49')
+    const board = this.game$.selectSquare(_who, index)
 
-    this.game[index] = _who
+    await this.game$.save()
 
     const rowNumber = (index / 7) | 0
     const columnNumber = index % 7
     let celdCount = 0
 
     for (let column = rowNumber * 7; column < rowNumber * 7 + 7; column++) {
-      if (this.game[column] === _who) {
+      if (board[column] === _who) {
         celdCount++
         if (celdCount === 4) break
       } else celdCount &&= 0
@@ -120,7 +96,7 @@ export class GameController extends EventTarget {
 
     celdCount = 0
     for (let row = 0; row < 7; row++) {
-      if (this.game[row * 7 + columnNumber] === _who) {
+      if (board[row * 7 + columnNumber] === _who) {
         celdCount++
         if (celdCount >= 4) break
       } else celdCount &&= 0
