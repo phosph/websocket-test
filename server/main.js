@@ -5,8 +5,13 @@ dotenv.config()
 import express from 'express'
 import session from 'express-session'
 import { WebSocketServer } from 'ws'
-import { GameList } from './server/game-controller.js'
-import * as WSControlers from './server/websocket-message-controller.js'
+
+console.log('initializing DB')
+import { sequelize } from './models/index.js'
+await sequelize.sync({ alter: true })
+
+import { GameList } from './controllers/game-controller.js'
+import * as WSControlers from './controllers/websocket-message-controller.js'
 
 /** @type {Map<string, import("ws").WebSocket>} */
 const userWsMap = new Map()

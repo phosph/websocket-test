@@ -29,7 +29,7 @@ body {
     pointer-events: all;
 } */
 
-.board {
+/* .board {
     display: grid;
     grid-template-rows: repeat(7, 1fr);
     grid-template-columns: repeat(7, 1fr);
@@ -42,9 +42,9 @@ body {
     position: relative;
     padding-left: 2rem;
     padding-top: 2rem;
-}
+} */
 
-.board .board-square {
+/* .board .board-square {
     outline: 1px solid;
     cursor: pointer;
 }
@@ -67,12 +67,12 @@ body {
 }
 .board .board-square.selected.adversary {
     background-color: #ff7f7f;
-}
+} */
 
-.board  {
+/* .board  {
     counter-reset: row column;
-}
-.board .board-square:nth-child(7n + 1) {
+} */
+/* .board .board-square:nth-child(7n + 1) {
     position: relative;
 }
 .board .board-square:nth-child(7n + 1)::before {
@@ -93,7 +93,7 @@ body {
     top: -0.5rem;
     left: 50%;
     transform: translate(-50%, -100%);
-}
+} */
 
 
 
@@ -130,47 +130,3 @@ body {
     border-bottom-right-radius: 8px;
 }
 
-stacker-board {
-    display: block;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    padding: 1rem;
-}
-
-
-/* ******+ */
-
-.modal {
-
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: #0004;
-    z-index: 10;
-    visibility: hidden;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-
-.modal.open {
-    visibility: visible;
-}
-
-.modal > .modal-content {
-    background-color: white;
-    padding: 2rem;
-    min-width: 600px;
-    min-height: 150px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    border-radius: 8px;
-}
-
-#adversary-turn.modal {
-    background-color: #0002;
-}

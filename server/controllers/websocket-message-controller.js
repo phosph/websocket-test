@@ -1,26 +1,31 @@
 // @ts-check
+import * as WSEventTypes from 'utils/event-types.js'
 import { GameController } from './game-controller.js'
-import * as WSEventTypes from '../utils/event-types.js'
 
 /**
  * @param {import("ws").MessageEvent} event
- * @param {import("./game-controller").GameList} gameList
+ * @param {import("./game-controller.js").GameList} gameList
  * @param {Map<string, import("ws").WebSocket>} websocketList
  * @param {string} userId
  */
-export const messageController = (event, gameList, websocketList, userId) => {
+export async function messageController(
+  event,
+  gameList,
+  websocketList,
+  userId,
+) {
   try {
     const data = JSON.parse(event.data.toString())
     if (!WSEventTypes.isPayloadData(data)) return
 
     switch (data.type) {
       case WSEventTypes.START_GAME:
-        startGameController(gameList, websocketList, userId)
+        await startGameController(gameList, websocketList, userId)
         break
       case WSEventTypes.SQUARE_SELECTED: {
         const game = gameList.getByUserId(userId)
         if (game) {
-          const del = squareSelectedController(
+          const del = await squareSelectedController(
             game,
             websocketList,
             userId,
@@ -37,20 +42,20 @@ export const messageController = (event, gameList, websocketList, userId) => {
 }
 
 /**
- * @param {import("./game-controller").GameList} gameList
+ * @param {import("./game-controller.js").GameList} gameList
  * @param {Map<string, import("ws").WebSocket>} websocketList
  * @param {string} userId
- *
- * @returns {import("./game-controller").GameController}
+ * @returns {Promise<import("./game-controller.js").GameController>}
  */
-const startGameController = (gameList, websocketList, userId) => {
+async function startGameController(gameList, websocketList, userId) {
   const game =
-    gameList.findEmptyGame() ?? gameList.addGame(new GameController())
+    gameList.findEmptyGame() ??
+    gameList.addGame(await new GameController().init())
 
-  game.addGamer(userId)
+  await game.addGamer(userId)
 
   if (game.canStart) {
-    /** @type {import("../utils/event-types.js").StartGameStatusPayload} */
+    /** @type {import("utils/event-types.js").StartGameStatusPayload} */
     const wsPayload = {
       type: WSEventTypes.START_GAME_STATUS,
       data: { canStart: true },
@@ -78,7 +83,7 @@ const startGameController = (gameList, websocketList, userId) => {
       .get(/** @type {string} */ (game.userB))
       ?.send(JSON.stringify(lockEvent))
   } else {
-    /** @type {import("../utils/event-types.js").StartGameStatusPayload} */
+    /** @type {import("utils/event-types.js").StartGameStatusPayload} */
     const wsPayload = {
       type: WSEventTypes.START_GAME_STATUS,
       data: { canStart: false },
@@ -92,15 +97,15 @@ const startGameController = (gameList, websocketList, userId) => {
 }
 
 /**
- *
  * @param {GameController} game
  * @param {Map<string, import("ws").WebSocket>} websocketList
  * @param {string} userId
  * @param {WSEventTypes.SquareSelectedPayload} data
+ * @returns {Promise<boolean>}
  */
-const squareSelectedController = (game, websocketList, userId, data) => {
+async function squareSelectedController(game, websocketList, userId, data) {
   if (!game) throw new TypeError('invalid Game')
-  const win = game.selectSquare(userId, data.data.square)
+  const win = await game.selectSquare(userId, data.data.square)
 
   const userWs = websocketList.get(userId)
   if (!userWs) throw new Error('there is no WebSocket')

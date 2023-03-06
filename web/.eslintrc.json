@@ -1,8 +1,7 @@
 {
   "env": {
     "browser": true,
-    "node": false,
-    "es7": true
+    "node": false
   },
   "parserOptions": {
     "ecmaVersion": 7

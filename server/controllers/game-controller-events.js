@@ -1,3 +1,5 @@
+// @ts-check
+
 export class UserAddedEvent extends Event {
   /**
    * @param {EventInit=} eventInitDict
